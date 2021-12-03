@@ -1,9 +1,8 @@
-package day1
+package day12020
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import java.io.File
 
 
 class ExpenseReportSpec : FunSpec({

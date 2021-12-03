@@ -1,10 +1,5 @@
-import day1.ExpenseReport
-import java.io.File
+import day12020.DayOne
 
 fun main(args: Array<String>) {
-    val inputPath = "src/main/resources/day1/input.txt"
-    val rows: Collection<Int> = File(inputPath).readLines().map(String::toInt).toList()
-    val report = ExpenseReport(rows)
-
-    println("Solution is ${report.solution}!")
+    DayOne.solve()
 }

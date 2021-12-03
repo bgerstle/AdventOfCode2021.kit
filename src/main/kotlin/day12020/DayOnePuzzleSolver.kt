@@ -1,8 +1,21 @@
-package day1
+package day12020
+
+import java.io.File
 
 class ExpenseReport(val rows: Collection<Int>) {
     val solution: Int?
         get() = rows.pairsWithSum(2020).firstOrNull()?.let { pair -> pair.first * pair.second }
+}
+
+object DayOne {
+    fun solve() {
+        val inputPath = "src/main/resources/day1/input.txt"
+        val rows: Collection<Int> = File(inputPath).readLines().map(String::toInt).toList()
+        val report = ExpenseReport(rows)
+
+        println("Solution is ${report.solution}!")
+    }
+
 }
 
 fun Collection<Int>.pairsWithSum(sum: Int): Collection<Pair<Int, Int>> {
