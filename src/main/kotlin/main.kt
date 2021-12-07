@@ -1,5 +1,5 @@
-import day12020.DayOne
+import day1.DayOne
 
 fun main(args: Array<String>) {
-    DayOne.solve()
+    print(DayOne(DayOne.Inputs.problem).partOneSolution)
 }
