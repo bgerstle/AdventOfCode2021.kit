@@ -1,7 +1,6 @@
 package days
 
 import parseIntPerLine
-import java.io.File
 
 val Collection<Int>.numberOfIncreases
     get() =
@@ -11,9 +10,6 @@ val Collection<Int>.numberOfIncreases
                 return@fold Pair(updatedIncreases, nextMeasurement)
             }
             .first
-
-val List<Int>.sum
-    get() = reduce(Int::plus)
 
 class DayOne(inputs: Collection<Int>) {
     val partOneSolution: Int = inputs.numberOfIncreases

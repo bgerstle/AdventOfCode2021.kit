@@ -1,5 +1,6 @@
 package days
 
+import seriesSum
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
@@ -11,23 +12,34 @@ import kotlin.math.absoluteValue
 
 
 class DayTwoSpec : FunSpec({
-    context("part one") {
-        test("solves the example") {
-            DayTwo(DayTwo.Inputs.example).partOneSolution shouldBe 2
+    context("examples") {
+        test("solves part one example") {
+            DayTwo(DayTwo.Inputs.example).partOneSolution shouldBe 37
         }
 
         test("picks same answer for arbitrary ordering of inputs") {
             checkAll(Arb.shuffle(DayTwo.Inputs.example)) { positions ->
-                DayTwo(positions).partOneSolution shouldBe 2
+                DayTwo(positions).partOneSolution shouldBe 37
             }
+        }
+
+        test("solves part two example") {
+            DayTwo(DayTwo.Inputs.example).partTwoSolution shouldBe 168
         }
     }
 
     context("costToAlignAt") {
-        test("aligning to 0 is the same as the sum of positions") {
-            checkAll(Arb.list(Arb.int(min = 0), 1..100)) { ints ->
+        test("aligning to 0 with CONSTANT burn rate is the same as the sum of positions") {
+            checkAll(Arb.list(Arb.int(min = 0, max = 100), 1..100)) { ints ->
                 val d2 = DayTwo(ints)
-                d2.costToAlignAt(0) shouldBe ints.sum
+                d2.costToAlignAt(0, DayTwo.FuelBurnRate.CONSTANT) shouldBe ints.sum()
+            }
+        }
+
+        test("aligning to 0 with linear burn rate is the same as the sum of positions' seriesSum") {
+            checkAll(Arb.list(Arb.int(min = 0, max = 100), 1..100)) { ints ->
+                val d2 = DayTwo(ints)
+                d2.costToAlignAt(0, DayTwo.FuelBurnRate.LINEAR) shouldBe ints.map(Int::seriesSum).sum()
             }
         }
     }
@@ -35,7 +47,7 @@ class DayTwoSpec : FunSpec({
     context("Int.distance") {
         test("is zero when position == alignAt") {
             checkAll(Arb.list(Arb.int(min = 0), 1..100)) { ints ->
-                val costs = ints.map { it.distance(it) }
+                val costs = ints.map { it.distanceTo(it) }
                 costs.all { it == 0 } shouldBe true
             }
         }
@@ -43,7 +55,7 @@ class DayTwoSpec : FunSpec({
         test("is the absolute distance between position and alignAt") {
             checkAll(Arb.int(min = 0), Arb.int()) { position, distance ->
                 val alignAt = position + distance
-                position.distance(alignAt) shouldBe distance.absoluteValue
+                position.distanceTo(alignAt) shouldBe distance.absoluteValue
             }
         }
     }

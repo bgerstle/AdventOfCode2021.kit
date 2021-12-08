@@ -1,34 +1,46 @@
 package days
 
+import seriesSum
 import parseCSV
 import kotlin.math.absoluteValue
 
-fun Int.distance(to: Int): Int {
+fun Int.distanceTo(to: Int): Int {
     return (to - this).absoluteValue
 }
 
 class DayTwo(val positions: List<Int>) {
+    val partOneSolution: Int? = minPositionAndCost(FuelBurnRate.CONSTANT)?.cost
+
+    val partTwoSolution: Int? = minPositionAndCost(FuelBurnRate.LINEAR)?.cost
+
     data class PositionAndCost(val position: Int, val cost: Int)
 
-    val minPositionAndCost: PositionAndCost? =
-        costsByPosition
-            .entries
-            .minByOrNull { it.value }
-            ?.let { PositionAndCost(position = it.key, cost = it.value) }
+    enum class FuelBurnRate {
+        CONSTANT, LINEAR
+    }
 
-    val partOneSolution: Int? = minPositionAndCost?.cost
+    fun minPositionAndCost(fuelBurnRate: FuelBurnRate = FuelBurnRate.CONSTANT): PositionAndCost? =
+        costsByPosition(fuelBurnRate).minByOrNull(PositionAndCost::cost)
 
-    val costsByPosition: Map<Int, Int>
-        get() = positions
-            .fold(mapOf()) { acc, p ->
-                val totalCost = costToAlignAt(p)
-                mapOf(p to totalCost) + acc
-            }
+    val allPossiblePositions: IntRange
+        get() = positions.minOrNull()!!..positions.maxOrNull()!!
 
-    fun costToAlignAt(position: Int): Int =
+    fun costsByPosition(fuelBurnRate: FuelBurnRate): List<PositionAndCost> =
+        allPossiblePositions.fold(emptyList()) { acc, p ->
+            val totalCost = costToAlignAt(p, fuelBurnRate)
+            listOf(PositionAndCost(position = p, cost = totalCost)) + acc
+        }
+
+    fun costToAlignAt(alignmentPosition: Int, fuelBurnRate: FuelBurnRate): Int =
         positions
-            .map { it.distance(position) }
-            .sum
+            .map { position ->
+                val distance = position.distanceTo(alignmentPosition)
+                when(fuelBurnRate) {
+                    FuelBurnRate.CONSTANT -> distance
+                    FuelBurnRate.LINEAR -> distance.seriesSum
+                }
+            }
+            .sum()
 
     object Inputs {
         val example: List<Int> = """

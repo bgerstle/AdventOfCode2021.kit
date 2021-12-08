@@ -1,5 +1,6 @@
 package day12020
 
+import seriesSum
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -10,12 +11,6 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.*
 import io.kotest.property.checkAll
 import io.kotest.property.forAll
-
-val Int.factorial: Int
-    get() = when {
-        (this <= 0) -> 0
-        else -> this + (this - 1).factorial
-    }
 
 val rangeAtLeastTwoNumbersLong = Arb.int(min = 1).map { (0..1).toList() }
 val pairOfPositiveInts: Arb<Pair<Int, Int>> =
@@ -45,9 +40,9 @@ class FindPairWithSumSpec : FunSpec({
                 }
             }
 
-            test("number of pairs is factorial of collection size - 1") {
+            test("number of pairs is fibonacci of collection size - 1") {
                 checkAll(rangeAtLeastTwoNumbersLong) { xs ->
-                    xs.pairPermutations.size shouldBe (xs.size - 1).factorial
+                    xs.pairPermutations.size shouldBe (xs.size - 1).seriesSum
                 }
             }
 

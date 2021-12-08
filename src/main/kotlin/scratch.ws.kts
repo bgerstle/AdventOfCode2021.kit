@@ -9,5 +9,6 @@ d1.partOneSolution
 d1.partTwoSolution
 
 val d2 = DayTwo(DayTwo.Inputs.actual)
-
 d2.partOneSolution
+d2.partTwoSolution
+
