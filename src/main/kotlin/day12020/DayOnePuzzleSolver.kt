@@ -1,5 +1,6 @@
 package day12020
 
+import parseIntPerLine
 import java.io.File
 
 class ExpenseReport(val rows: Collection<Int>) {
@@ -22,8 +23,7 @@ class ExpenseReport(val rows: Collection<Int>) {
 }
 
 object DayOne {
-    val input: Collection<Int>
-        get() = File("src/main/resources/day12020/input.txt").readLines().map(String::toInt).toList()
+    val input: Collection<Int> = javaClass.getResource("day12020.txt").readText().parseIntPerLine()
 
     fun solve() {
         println("Solution is ${ExpenseReport(input).partOneSolution}!")

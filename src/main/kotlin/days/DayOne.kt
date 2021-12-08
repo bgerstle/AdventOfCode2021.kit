@@ -1,5 +1,6 @@
-package day1
+package days
 
+import parseIntPerLine
 import java.io.File
 
 val Collection<Int>.numberOfIncreases
@@ -34,8 +35,8 @@ class DayOne(inputs: Collection<Int>) {
             269
             260
             263
-        """.trimIndent().lines().map(String::toInt)
+        """.parseIntPerLine()
 
-        val actual = File("src/main/resources/day1/input.txt").readLines().map(String::toInt).toList()
+        val actual = javaClass.getResource("day1.txt").readText().parseIntPerLine()
     }
 }
